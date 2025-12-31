@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Ферма</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .farm-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .clicker {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .coin {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 30px 30px, #FFD700, #FFA500);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #8B7500;
+            transition: transform 0.1s;
+            user-select: none;
+        }
+        
+        .coin:active {
+            transform: scale(0.95);
+        }
+        
+        .upgrades {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .upgrade {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .upgrade:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .upgrade.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .upgrade-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .upgrade-cost {
+            color: #FFD700;
+            font-size: 0.9rem;
+        }
+        
+        .nft-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nft-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .nft-item {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        
+        .nft-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .nft-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .nft-name {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .nft-value {
+            color: #FFD700;
+            font-weight: bold;
+        }
+        
+        .gift-button {
+            background: linear-gradient(135deg, #ff0080, #ff8c00);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        
+        .gift-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .gift-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transform: translateX(150%);
+            transition: transform 0.5s;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+            }
+            
+            .coin {
+                width: 120px;
+                height: 120px;
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NFT Ферма</h1>
+            <p>Собирайте монетки, улучшайте ферму и получайте редкие NFT!</p>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-label">Монеты</div>
+                    <div class="stat-value" id="coins">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Монет/сек</div>
+                    <div class="stat-value" id="coinsPerSecond">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">NFT в коллекции</div>
+                    <div class="stat-value" id="nftCount">0</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="game-area">
+            <div class="farm-section">
+                <h2>Ферма</h2>
+                <div class="clicker">
+                    <div class="coin" id="coin">₿</div>
+                    <p>Кликни для получения монет!</p>
+                </div>
+                
+                <h3>Улучшения</h3>
+                <div class="upgrades" id="upgrades">
+                    <!-- Улучшения будут добавлены через JS -->
+                </div>
+            </div>
+            
+            <div class="nft-section">
+                <h2>Коллекция NFT</h2>
+                <p>Собирайте редкие NFT-подарки!</p>
+                
+                <button class="gift-button" id="giftButton">Получить NFT-подарок (1000 монет)</button>
+                
+                <div class="nft-container" id="nftContainer">
+                    <!-- NFT будут добавлены через JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <!-- Уведомления будут показываться здесь -->
+    </div>
+
+    <script>
+        // Игровые данные
+        const gameData = {
+            coins: 0,
+            coinsPerClick: 1,
+            coinsPerSecond: 0,
+            nfts: [],
+            upgrades: [
+                { id: 1, name: "Улучшенный клик", cost: 10, coinsPerClick: 1, owned: 0 },
+                { id: 2, name: "Автокликер", cost: 50, coinsPerSecond: 1, owned: 0 },
+                { id: 3, name: "Ферма монет", cost: 200, coinsPerSecond: 5, owned: 0 },
+                { id: 4, name: "NFT-майнинг", cost: 500, coinsPerSecond: 10, owned: 0 },
+                { id: 5, name: "Крипто-ферма", cost: 1000, coinsPerSecond: 20, owned: 0 },
+                { id: 6, name: "Блокчейн-кластер", cost: 5000, coinsPerSecond: 50, owned: 0 }
+            ],
+            nftItems: [
+                { id: 1, name: "Редкий пепe", value: 10, icon: "👾" },
+                { id: 2, name: "Золотой биткоин", value: 25, icon: "💰" },
+                { id: 3, name: "Крипто-кит", value: 50, icon: "🐱" },
+                { id: 4, name: "NFT-арт", value: 100, icon: "🖼️" },
+                { id: 5, name: "Виртуальная земля", value: 250, icon: "🏝️" },
+                { id: 6, name: "Цифровой динозавр", value: 500, icon: "🦖" },
+                { id: 7, name: "Космический корабль", value: 1000, icon: "🚀" },
+                { id: 8, name: "Легендарный токен", value: 5000, icon: "💎" }
+            ]
+        };
+
+        // Элементы DOM
+        const coinsElement = document.getElementById('coins');
+        const coinsPerSecondElement = document.getElementById('coinsPerSecond');
+        const nftCountElement = document.getElementById('nftCount');
+        const coinElement = document.getElementById('coin');
+        const upgradesElement = document.getElementById('upgrades');
+        const giftButton = document.getElementById('giftButton');
+        const nftContainer = document.getElementById('nftContainer');
+        const notification = document.getElementById('notification');
+
+        // Инициализация игры
+        function initGame() {
+            updateUI();
+            renderUpgrades();
+            
+            // Автоматическое начисление монет каждую секунду
+            setInterval(() => {
+                gameData.coins += gameData.coinsPerSecond;
+                updateUI();
+            }, 1000);
+            
+            // Обработчик клика по монете
+            coinElement.addEventListener('click', () => {
+                gameData.coins += gameData.coinsPerClick;
+                updateUI();
+                
+                // Анимация клика
+                coinElement.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    coinElement.style.transform = 'scale(1)';
+                }, 100);
+            });
+            
+            // Обработчик получения NFT-подарка
+            giftButton.addEventListener('click', getNFTGift);
+        }
+
+        // Обновление интерфейса
+        function updateUI() {
+            coinsElement.textContent = Math.floor(gameData.coins);
+            coinsPerSecondElement.textContent = gameData.coinsPerSecond;
+            nftCountElement.textContent = gameData.nfts.length;
+            
+            // Обновление состояния кнопки подарка
+            giftButton.disabled = gameData.coins < 1000;
+            
+            // Обновление состояния улучшений
+            renderUpgrades();
+        }
+
+        // Отображение улучшений
+        function renderUpgrades() {
+            upgradesElement.innerHTML = '';
+            
+            gameData.upgrades.forEach(upgrade => {
+                const upgradeElement = document.createElement('div');
+                upgradeElement.className = `upgrade ${gameData.coins < upgrade.cost ? 'disabled' : ''}`;
+                upgradeElement.innerHTML = `
+                    <div class="upgrade-title">${upgrade.name}</div>
+                    <div class="upgrade-cost">Цена: ${upgrade.cost} монет</div>
+                    <div class="upgrade-owned">Куплено: ${upgrade.owned}</div>
+                `;
+                
+                if (gameData.coins >= upgrade.cost) {
+                    upgradeElement.addEventListener('click', () => purchaseUpgrade(upgrade.id));
+                }
+                
+                upgradesElement.appendChild(upgradeElement);
+            });
+        }
+
+        // Покупка улучшения
+        function purchaseUpgrade(upgradeId) {
+            const upgrade = gameData.upgrades.find(u => u.id === upgradeId);
+            
+            if (gameData.coins >= upgrade.cost) {
+                gameData.coins -= upgrade.cost;
+                upgrade.owned++;
+                
+                // Увеличиваем стоимость улучшения после покупки
+                upgrade.cost = Math.floor(upgrade.cost * 1.5);
+                
+                // Применяем эффект улучшения
+                if (upgrade.coinsPerClick) {
+                    gameData.coinsPerClick += upgrade.coinsPerClick;
+                }
+                
+                if (upgrade.coinsPerSecond) {
+                    gameData.coinsPerSecond += upgrade.coinsPerSecond;
+                }
+                
+                updateUI();
+                showNotification(`Улучшение "${upgrade.name}" куплено!`);
+            }
+        }
+
+        // Получение NFT-подарка
+        function getNFTGift() {
+            if (gameData.coins >= 1000) {
+                gameData.coins -= 1000;
+                
+                // Случайный выбор NFT
+                const randomNFT = gameData.nftItems[Math.floor(Math.random() * gameData.nftItems.length)];
+                
+                // Добавляем NFT в коллекцию
+                gameData.nfts.push({
+                    ...randomNFT,
+                    id: Date.now() // Уникальный ID
+                });
+                
+                // Обновляем UI
+                updateUI();
+                renderNFTs();
+                
+                showNotification(`Вы получили NFT: ${randomNFT.name} (+${randomNFT.value} монет/сек)!`);
+            }
+        }
+
+        // Отображение коллекции NFT
+        function renderNFTs() {
+            nftContainer.innerHTML = '';
+            
+            gameData.nfts.forEach(nft => {
+                const nftElement = document.createElement('div');
+                nftElement.className = 'nft-item';
+                nftElement.innerHTML = `
+                    <div class="nft-icon">${nft.icon}</div>
+                    <div class="nft-name">${nft.name}</div>
+                    <div class="nft-value">+${nft.value}/сек</div>
+                `;
+                
+                nftContainer.appendChild(nftElement);
+            });
+        }
+
+        // Показ уведомления
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Запуск игры при загрузке страницы
+        window.addEventListener('load', initGame);
+    </script>
+</body>
+</html>
